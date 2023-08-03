@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { ServicesService } from './services.service';
-import { SERVICE_NOT_FOUND } from './services.constants';
+import { SERVICE_ALREADY_EXIST, SERVICE_NOT_FOUND } from './services.constants';
 
 @Controller('services')
 export class ServicesController {
@@ -31,7 +31,16 @@ export class ServicesController {
   }
 
   @Post('create')
-  async create(@Body() dto: CreateServiceDto) { }
+  async create(@Body() dto: CreateServiceDto) {
+
+    const service = await this.servicesService.findBySlug(dto.slug);
+
+    if (service) {
+      throw new BadRequestException(SERVICE_ALREADY_EXIST);
+    }
+    
+    return this.servicesService.create(dto);
+  }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {}

@@ -5,7 +5,9 @@ import { Document, HydratedDocument, Schema as MSchema } from "mongoose";
 export class ServiceModel extends Document {
 
   @Prop({
-    type: MSchema.Types.String
+    type: MSchema.Types.String,
+    unique: true,
+    index: true
   })
   slug: string;
 
