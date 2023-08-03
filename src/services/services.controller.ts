@@ -14,9 +14,7 @@ export class ServicesController {
   async getList(@Query() query) {
     const { count, shift } = query;
 
-    return {
-      ok: 'get messages list',
-    }
+    return this.servicesService.getList();
   }
 
   @Get(':id')
@@ -58,6 +56,17 @@ export class ServicesController {
   async update(
     @Param('id') id: string, 
     @Body() dto: CreateServiceDto
-  ) {}
+  ) {
+
+    const service = await this.servicesService.findById(id);
+
+    if (!service) {
+      throw new NotFoundException(SERVICE_NOT_FOUND);
+    }
+
+    return this.servicesService.update(id, dto);
+
+
+  }
 
 }

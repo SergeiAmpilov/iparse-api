@@ -25,4 +25,14 @@ export class ServicesService {
   async delete(id: string) {
     return this.serviceModel.findByIdAndDelete(id).exec();
   }
+
+  async update(id: string, dto: Omit<CreateServiceDto, 'slug'>) {
+    return this.serviceModel.findByIdAndUpdate(id, dto, {
+      new: true,
+    }).exec();
+  }
+
+  async getList() {
+    return this.serviceModel.find().exec();
+  }
 }
