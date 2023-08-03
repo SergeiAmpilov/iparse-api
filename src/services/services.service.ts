@@ -21,4 +21,8 @@ export class ServicesService {
   async create(dto: CreateServiceDto) {
     return this.serviceModel.create(dto);
   }
+
+  async delete(id: string) {
+    return this.serviceModel.findByIdAndDelete(id).exec();
+  }
 }

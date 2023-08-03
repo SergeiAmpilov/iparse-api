@@ -38,12 +38,21 @@ export class ServicesController {
     if (service) {
       throw new BadRequestException(SERVICE_ALREADY_EXIST);
     }
-    
+
     return this.servicesService.create(dto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {}
+  async delete(@Param('id') id: string) {
+    const service = await this.servicesService.findById(id);
+
+    if (!service) {
+      throw new NotFoundException(SERVICE_NOT_FOUND);
+    }
+
+    return this.servicesService.delete(id);
+
+  }
 
   @Patch(':id')
   async update(
