@@ -6,9 +6,17 @@ import { UsersModule } from './users/users.module';
 import { ResourcesModule } from './resources/resources.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ArticlesModule } from './articles/articles.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [ ServicesModule, UsersModule, ResourcesModule, TasksModule, ArticlesModule ],
+  imports: [ 
+    MongooseModule.forRoot('mongodb://0.0.0.0:27017/nestcourse'),
+    ServicesModule, 
+    UsersModule, 
+    ResourcesModule, 
+    TasksModule, 
+    ArticlesModule 
+  ],
   controllers: [AppController ],
   providers: [AppService],
 })
