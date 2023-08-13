@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UsersService } from './users.service';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -10,6 +10,7 @@ export class UsersController {
     private readonly usersService: UsersService, 
   ) {  }
 
+  @UsePipes(new ValidationPipe())
   @Post('register')
   async register(
     @Body() dto: UserRegisterDto,
@@ -19,9 +20,12 @@ export class UsersController {
 
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
-  async login(dto: UserLoginDto) {
+  async login(
+    @Body() dto: UserLoginDto
+    ) {
     return this.usersService.login(dto);
   }
 }

@@ -7,11 +7,11 @@ export class UsersService {
 
 
   async register(dto: UserRegisterDto) {
-
+    return dto;    
   }
 
   async login(dto: UserLoginDto) {
-
+    return dto;
   }
-  
+
 }
