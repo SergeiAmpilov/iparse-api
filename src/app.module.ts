@@ -9,14 +9,19 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SeoparserModule } from './seoparser/seoparser.module';
 import { EcomparserModule } from './ecomparser/ecomparser.module';
 import { ExamplesModule } from './examples/examples.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [ 
     MongooseModule.forRoot('mongodb://0.0.0.0:27017/iparseapidb'),
+    ConfigModule.forRoot(),
     ServicesModule, 
     UsersModule, 
     TasksModule, 
-    ArticlesModule, SeoparserModule, EcomparserModule, ExamplesModule 
+    ArticlesModule, 
+    SeoparserModule, 
+    EcomparserModule, 
+    ExamplesModule 
   ],
   controllers: [AppController],
   providers: [AppService],
