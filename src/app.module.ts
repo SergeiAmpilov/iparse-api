@@ -7,6 +7,8 @@ import { ResourcesModule } from './resources/resources.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ArticlesModule } from './articles/articles.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SeoparserModule } from './seoparser/seoparser.module';
+import { EcomparserModule } from './ecomparser/ecomparser.module';
 
 @Module({
   imports: [ 
@@ -15,7 +17,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     UsersModule, 
     ResourcesModule, 
     TasksModule, 
-    ArticlesModule 
+    ArticlesModule, SeoparserModule, EcomparserModule 
   ],
   controllers: [AppController ],
   providers: [AppService],
