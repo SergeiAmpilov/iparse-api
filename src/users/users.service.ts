@@ -7,6 +7,7 @@ import { UserDocument } from './model/user.model';
 import { compare, genSalt, hash } from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { INCORRECT_PASSWORD_ERROR, NOT_FOUND_USER_ERROR } from './constants.users';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,7 @@ export class UsersService {
   constructor(
     @InjectModel('user') private readonly userModel: Model<UserDocument>,
     private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async createUser(dto: UserRegisterDto) {
@@ -48,8 +50,13 @@ export class UsersService {
     return { email: existedUser.email };
   }
 
-  async login(email: string) {
-    return email;
+  async login(email: string): Promise<{ token: string }> {
+
+    const payload = { email };
+    const token = await this.jwtService.signAsync(payload);
+
+    return { token };
+    
   }
 
   async findByEmail(email: string) {

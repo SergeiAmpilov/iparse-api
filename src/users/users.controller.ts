@@ -8,7 +8,7 @@ import { USER_ALREADY_EXIST_ERROR } from './constants.users';
 export class UsersController {
 
   constructor(
-    private readonly usersService: UsersService, 
+    private readonly usersService: UsersService,
   ) {  }
 
   @UsePipes(new ValidationPipe())
@@ -32,10 +32,10 @@ export class UsersController {
   @HttpCode(200)
   @Post('login')
   async login(
-    @Body() { email, password }: UserLoginDto
+    @Body() { login, password }: UserLoginDto
     ) {
 
-      const resValidate: { email: string} = await this.usersService.validateUser(email, password);
-      return this.usersService.login(resValidate.email);
+      const { email } = await this.usersService.validateUser(login, password);
+      return this.usersService.login(email);
   }
 }
