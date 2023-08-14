@@ -1,7 +1,8 @@
-import { Body, Controller, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UsersService } from './users.service';
 import { UserLoginDto } from './dto/user-login.dto';
+import { USER_ALREADY_EXIST_ERROR } from './constants.users';
 
 @Controller('users')
 export class UsersController {
@@ -16,8 +17,13 @@ export class UsersController {
     @Body() dto: UserRegisterDto,
   ) {
 
-    return this.usersService.register(dto);
+    const existingUser = this.usersService.findByEmail(dto.email);
 
+    if (existingUser) {
+      throw new BadRequestException(USER_ALREADY_EXIST_ERROR);
+    }
+
+    return this.usersService.createUser(dto);
   }
 
   @UsePipes(new ValidationPipe())
