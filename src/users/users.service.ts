@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from './model/user.model';
-import { genSalt, hash } from 'bcryptjs';
+import { compare, genSalt, hash } from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
+import { INCORRECT_PASSWORD_ERROR, NOT_FOUND_USER_ERROR } from './constants.users';
 
 @Injectable()
 export class UsersService {
@@ -28,11 +29,27 @@ export class UsersService {
     });
 
     return newUser.save();
-    
+
   }
 
-  async login(dto: UserLoginDto) {
-    return dto;
+  async validateUser(email: string, password: string) {
+    const existedUser = await this.findByEmail(email);
+
+    if (!existedUser) {
+      throw new UnauthorizedException(NOT_FOUND_USER_ERROR);
+    }
+
+    const isCorrectPassword = await compare(password, existedUser.passwordHash);
+
+    if (!isCorrectPassword) {
+      throw new UnauthorizedException(INCORRECT_PASSWORD_ERROR);
+    }
+
+    return { email: existedUser.email };
+  }
+
+  async login(email: string) {
+    return email;
   }
 
   async findByEmail(email: string) {

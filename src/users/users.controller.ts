@@ -32,8 +32,10 @@ export class UsersController {
   @HttpCode(200)
   @Post('login')
   async login(
-    @Body() dto: UserLoginDto
+    @Body() { email, password }: UserLoginDto
     ) {
-    return this.usersService.login(dto);
+
+      const resValidate: { email: string} = await this.usersService.validateUser(email, password);
+      return this.usersService.login(resValidate.email);
   }
 }
