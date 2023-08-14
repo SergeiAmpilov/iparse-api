@@ -1,7 +1,8 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { ServicesService } from './services.service';
 import { SERVICE_ALREADY_EXIST, SERVICE_NOT_FOUND } from './services.constants';
+import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
 
 @Controller('services')
 export class ServicesController {
@@ -10,6 +11,7 @@ export class ServicesController {
     private readonly servicesService: ServicesService,
   ) {}
 
+  @UseGuards(new JwtAuthGuard())
   @Get()
   async getList(@Query() query) {
     const { count, shift } = query;
