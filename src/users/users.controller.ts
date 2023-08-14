@@ -17,13 +17,15 @@ export class UsersController {
     @Body() dto: UserRegisterDto,
   ) {
 
-    const existingUser = this.usersService.findByEmail(dto.email);
+    const existingUser = await this.usersService.findByEmail(dto.email);
 
     if (existingUser) {
       throw new BadRequestException(USER_ALREADY_EXIST_ERROR);
     }
 
-    return this.usersService.createUser(dto);
+    const newUser = await this.usersService.createUser(dto);
+
+    return { ok: newUser.email };
   }
 
   @UsePipes(new ValidationPipe())
