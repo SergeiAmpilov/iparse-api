@@ -15,16 +15,16 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { ServicesService } from './services.service';
 import { SERVICE_ALREADY_EXIST, SERVICE_NOT_FOUND } from './services.constants';
 import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
+import { UserEmail } from 'src/decorators/user-email.decorator';
 
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
-  @UseGuards(new JwtAuthGuard())
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async getList(@Query() query) {
-    const { count, shift } = query;
-
+  async getList(@Query() query, @UserEmail() userEmail: string) {
+    console.log(userEmail);
     return this.servicesService.getList();
   }
 
