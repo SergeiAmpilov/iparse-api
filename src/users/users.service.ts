@@ -6,12 +6,14 @@ import { Model } from 'mongoose';
 import { UserDocument } from './model/user.model';
 import { compare, genSalt, hash } from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
-import { INCORRECT_PASSWORD_ERROR, NOT_FOUND_USER_ERROR } from './constants.users';
+import {
+  INCORRECT_PASSWORD_ERROR,
+  NOT_FOUND_USER_ERROR,
+} from './constants.users';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectModel('user') private readonly userModel: Model<UserDocument>,
     private readonly configService: ConfigService,
@@ -19,8 +21,7 @@ export class UsersService {
   ) {}
 
   async createUser(dto: UserRegisterDto) {
-
-    const saltHash = this.configService.get('SALT_HASH') ?? 10; 
+    const saltHash = this.configService.get('SALT_HASH') ?? 10;
     const salt = await genSalt(Number(saltHash));
 
     const passwordHash = await hash(dto.password, salt);
@@ -31,7 +32,6 @@ export class UsersService {
     });
 
     return newUser.save();
-
   }
 
   async validateUser(email: string, password: string) {
@@ -51,16 +51,13 @@ export class UsersService {
   }
 
   async login(email: string): Promise<{ token: string }> {
-
     const payload = { email };
     const token = await this.jwtService.signAsync(payload);
 
     return { token };
-    
   }
 
   async findByEmail(email: string) {
     return this.userModel.findOne({ email }).exec();
   }
-
 }

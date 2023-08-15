@@ -12,16 +12,16 @@ import { ExamplesModule } from './examples/examples.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ 
+  imports: [
     MongooseModule.forRoot('mongodb://0.0.0.0:27017/iparseapidb'),
     ConfigModule.forRoot(),
-    ServicesModule, 
-    UsersModule, 
-    TasksModule, 
-    ArticlesModule, 
-    SeoparserModule, 
-    EcomparserModule, 
-    ExamplesModule 
+    ServicesModule,
+    UsersModule,
+    TasksModule,
+    ArticlesModule,
+    SeoparserModule,
+    EcomparserModule,
+    ExamplesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

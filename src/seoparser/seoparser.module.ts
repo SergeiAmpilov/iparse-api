@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { SeoparserController } from './seoparser.controller';
 
 @Module({
-  controllers: [SeoparserController]
+  controllers: [SeoparserController],
 })
 export class SeoparserModule {}

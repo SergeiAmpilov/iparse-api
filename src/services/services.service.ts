@@ -7,8 +7,9 @@ import { CreateServiceDto } from './dto/create-service.dto';
 @Injectable()
 export class ServicesService {
   constructor(
-    @InjectModel('service') private readonly serviceModel: Model<ServiceDocument> ,
-  ) {  }
+    @InjectModel('service')
+    private readonly serviceModel: Model<ServiceDocument>,
+  ) {}
 
   async findById(id: string): Promise<ServiceDocument> {
     return this.serviceModel.findById(id).exec();
@@ -27,9 +28,11 @@ export class ServicesService {
   }
 
   async update(id: string, dto: Omit<CreateServiceDto, 'slug'>) {
-    return this.serviceModel.findByIdAndUpdate(id, dto, {
-      new: true,
-    }).exec();
+    return this.serviceModel
+      .findByIdAndUpdate(id, dto, {
+        new: true,
+      })
+      .exec();
   }
 
   async getList() {

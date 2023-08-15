@@ -1,4 +1,12 @@
-import { BadRequestException, Body, Controller, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UsersService } from './users.service';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -6,17 +14,11 @@ import { USER_ALREADY_EXIST_ERROR } from './constants.users';
 
 @Controller('users')
 export class UsersController {
-
-  constructor(
-    private readonly usersService: UsersService,
-  ) {  }
+  constructor(private readonly usersService: UsersService) {}
 
   @UsePipes(new ValidationPipe())
   @Post('register')
-  async register(
-    @Body() dto: UserRegisterDto,
-  ) {
-
+  async register(@Body() dto: UserRegisterDto) {
     const existingUser = await this.usersService.findByEmail(dto.email);
 
     if (existingUser) {
@@ -31,11 +33,8 @@ export class UsersController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
-  async login(
-    @Body() { login, password }: UserLoginDto
-    ) {
-
-      const { email } = await this.usersService.validateUser(login, password);
-      return this.usersService.login(email);
+  async login(@Body() { login, password }: UserLoginDto) {
+    const { email } = await this.usersService.validateUser(login, password);
+    return this.usersService.login(email);
   }
 }
