@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateSeoParserDto } from './dto/create-seoparser.dto';
 import { SeoparserService } from './seoparser.service';
 import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
 import { UserEmail } from 'src/decorators/user-email.decorator';
+import { UpdateSeoParserDto } from './dto/update-seoparser.dto';
 
 @Controller('seoparser')
 export class SeoparserController {
@@ -27,5 +36,15 @@ export class SeoparserController {
   @Get(':id')
   async getCard(@Param('id') id: string, @UserEmail() userEmail: string) {
     return this.seoParserService.findById(id, userEmail);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(
+    @Body() dto: UpdateSeoParserDto,
+    @Param('id') id: string,
+    @UserEmail() userEmail: string,
+  ) {
+    return this.seoParserService.update(dto, id, userEmail);
   }
 }
