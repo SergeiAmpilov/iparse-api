@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CreateSeoParserDto } from './dto/create-seoparser.dto';
 import { SeoparserService } from './seoparser.service';
 import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
@@ -21,5 +21,11 @@ export class SeoparserController {
   @Get()
   async getList(@UserEmail() userEmail: string) {
     return this.seoParserService.getByOwner(userEmail);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getCard(@Param('id') id: string, @UserEmail() userEmail: string) {
+    return this.seoParserService.findById(id, userEmail);
   }
 }

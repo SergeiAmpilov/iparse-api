@@ -6,6 +6,7 @@ import { CreateSeoParserDto } from './dto/create-seoparser.dto';
 import { UsersService } from 'src/users/users.service';
 import { UserDocument } from 'src/users/model/user.model';
 import { NOT_FOUND_USER_ERROR } from 'src/users/constants.users';
+import { SEO_PARSER_NOT_FOUND_ERROR } from './seoparser.constants';
 
 @Injectable()
 export class SeoparserService {
@@ -35,10 +36,6 @@ export class SeoparserService {
     });
   }
 
-  // async getAll() {
-  //   return this.seoParserModel.find().exec();
-  // }
-
   async getByOwner(ownerEmail: string) {
     const userFound: UserDocument = await this.usersService.findByEmail(
       ownerEmail,
@@ -49,5 +46,28 @@ export class SeoparserService {
     }
 
     return this.seoParserModel.find({ owner: userFound.id }).exec();
+  }
+
+  async findById(id: string, ownerEmail: string) {
+    const userFound: UserDocument = await this.usersService.findByEmail(
+      ownerEmail,
+    );
+
+    if (!userFound) {
+      throw new NotFoundException(NOT_FOUND_USER_ERROR);
+    }
+
+    const seoParserFound = await this.seoParserModel
+      .find({
+        _id: id,
+        owner: userFound.id,
+      })
+      .exec();
+
+    if (!seoParserFound) {
+      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
+    }
+
+    return seoParserFound;
   }
 }
