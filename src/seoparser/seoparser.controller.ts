@@ -6,6 +6,8 @@ import {
   Patch,
   Post,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateSeoParserDto } from './dto/create-seoparser.dto';
 import { SeoparserService } from './seoparser.service';
@@ -18,6 +20,7 @@ export class SeoparserController {
   constructor(private readonly seoParserService: SeoparserService) {}
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   @Post()
   async create(
     @Body() dto: CreateSeoParserDto,
@@ -39,6 +42,7 @@ export class SeoparserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   @Patch(':id')
   async update(
     @Body() dto: UpdateSeoParserDto,
