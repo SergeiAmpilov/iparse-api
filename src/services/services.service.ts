@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ServiceDocument, ServiceModel } from './model/services.model';
+import { ServiceDocument } from './model/services.model';
 import { Model } from 'mongoose';
 import { CreateServiceDto } from './dto/create-service.dto';
 
