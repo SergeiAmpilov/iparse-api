@@ -8,16 +8,15 @@ import { UserDocument } from 'src/users/model/user.model';
 import { NOT_FOUND_USER_ERROR } from 'src/users/constants.users';
 import { SEO_PARSER_NOT_FOUND_ERROR } from './seoparser.constants';
 import { UpdateSeoParserDto } from './dto/update-seoparser.dto';
-import { SeoParserTaskDocument } from './model/seoparser.task.model';
+import { SeoparsertaskService } from './seoparsertask.service';
 
 @Injectable()
 export class SeoparserService {
   constructor(
     @InjectModel('seoparser')
     private readonly seoParserModel: Model<SeoParserDocument>,
-    @InjectModel('seoparsertask')
-    private readonly seoParserTaskModel: Model<SeoParserTaskDocument>,
     private readonly usersService: UsersService,
+    private readonly seoParserTaskService: SeoparsertaskService,
   ) {}
 
   async create(
@@ -118,26 +117,8 @@ export class SeoparserService {
       throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
     }
 
-    this.runParsing(id, seoParserFound.resource);
+    this.seoParserTaskService.runParsing(id, seoParserFound.resource);
 
     return { ok: 'seo parser started' };
-  }
-
-  private async runParsing(id: string, resource: string) {
-    const start = new Date();
-    const finish = new Date();
-    const count = 101;
-    const file = 'demo file';
-
-    const parseResult = {
-      parser: id,
-      resource,
-      start,
-      finish,
-      count,
-      file,
-    };
-
-    this.seoParserTaskModel.create(parseResult);
   }
 }

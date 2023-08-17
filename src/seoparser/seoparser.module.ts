@@ -5,6 +5,7 @@ import { SeoParserSchema } from './model/seoparser.model';
 import { SeoParserTaskSchema } from './model/seoparser.task.model';
 import { SeoparserService } from './seoparser.service';
 import { UsersModule } from 'src/users/users.module';
+import { SeoparsertaskService } from './seoparsertask.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { UsersModule } from 'src/users/users.module';
     UsersModule,
   ],
   controllers: [SeoparserController],
-  providers: [SeoparserService],
+  providers: [SeoparserService, SeoparsertaskService],
 })
 export class SeoparserModule {}
