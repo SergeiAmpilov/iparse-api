@@ -10,6 +10,11 @@ export class SeoParserTaskModel extends Document {
   parser: Types.ObjectId;
 
   @Prop({
+    type: MSchema.Types.String,
+  })
+  resource: string;
+
+  @Prop({
     type: MSchema.Types.Date,
   })
   start: Date;

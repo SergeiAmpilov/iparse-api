@@ -123,7 +123,7 @@ export class SeoparserService {
     return { ok: 'seo parser started' };
   }
 
-  private async runParsing(id: string, resorce: string) {
+  private async runParsing(id: string, resource: string) {
     const start = new Date();
     const finish = new Date();
     const count = 101;
@@ -131,6 +131,7 @@ export class SeoparserService {
 
     const parseResult = {
       parser: id,
+      resource,
       start,
       finish,
       count,
