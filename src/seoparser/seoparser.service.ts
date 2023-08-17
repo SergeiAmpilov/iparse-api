@@ -52,52 +52,38 @@ export class SeoparserService {
   }
 
   async findById(id: string, ownerEmail: string) {
-    const userFound: UserDocument = await this.usersService.findByEmail(
-      ownerEmail,
-    );
+    const seoParser = await this.getVerifiedParser(id, ownerEmail);
 
-    if (!userFound) {
-      throw new NotFoundException(NOT_FOUND_USER_ERROR);
+    if (seoParser) {
+      return seoParser;
     }
-
-    const seoParserFound = await this.seoParserModel
-      .find({
-        _id: id,
-        owner: userFound.id,
-      })
-      .exec();
-
-    if (!seoParserFound) {
-      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
-    }
-
-    return seoParserFound;
   }
 
   async update(dto: UpdateSeoParserDto, id: string, ownerEmail: string) {
-    const userFound: UserDocument = await this.usersService.findByEmail(
-      ownerEmail,
-    );
+    const seoParser = await this.getVerifiedParser(id, ownerEmail);
 
-    if (!userFound) {
-      throw new NotFoundException(NOT_FOUND_USER_ERROR);
+    if (seoParser) {
+      return this.seoParserModel
+        .findByIdAndUpdate(id, dto, { new: true })
+        .exec();
     }
-
-    const seoParserFound = await this.seoParserModel
-      .find({
-        _id: id,
-        owner: userFound.id,
-      })
-      .exec();
-
-    if (!seoParserFound) {
-      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
-    }
-
-    return this.seoParserModel.findByIdAndUpdate(id, dto, { new: true }).exec();
   }
 
   async runTask(id: string, ownerEmail: string) {
+    const seoParser = await this.getVerifiedParser(id, ownerEmail);
+
+    if (seoParser) {
+      this.seoParserTaskService.runParsing(id, seoParser.resource);
+      return { ok: 'seo parser started' };
+    } else {
+      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
+    }
+  }
+
+  private async getVerifiedParser(
+    id: string,
+    ownerEmail: string,
+  ): Promise<SeoParserDocument | undefined> {
     const userFound: UserDocument = await this.usersService.findByEmail(
       ownerEmail,
     );
@@ -117,8 +103,6 @@ export class SeoparserService {
       throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
     }
 
-    this.seoParserTaskService.runParsing(id, seoParserFound.resource);
-
-    return { ok: 'seo parser started' };
+    return seoParserFound;
   }
 }
