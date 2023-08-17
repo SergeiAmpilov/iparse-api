@@ -51,4 +51,10 @@ export class SeoparserController {
   ) {
     return this.seoParserService.update(dto, id, userEmail);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/run')
+  async runTask(@Param('id') id: string, @UserEmail() userEmail: string) {
+    return this.seoParserService.runTask(id, userEmail);
+  }
 }
