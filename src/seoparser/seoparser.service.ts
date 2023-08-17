@@ -72,12 +72,12 @@ export class SeoparserService {
   async runTask(id: string, ownerEmail: string) {
     const seoParser = await this.getVerifiedParser(id, ownerEmail);
 
-    if (seoParser) {
-      this.seoParserTaskService.runParsing(id, seoParser.resource);
-      return { ok: 'seo parser started' };
-    } else {
+    if (!seoParser) {
       throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
     }
+
+    this.seoParserTaskService.runParsing(id, seoParser.resource);
+    return { ok: 'seo parser started' };
   }
 
   private async getVerifiedParser(
@@ -104,5 +104,15 @@ export class SeoparserService {
     }
 
     return seoParserFound;
+  }
+
+  async getAllTasks(id: string, ownerEmail: string) {
+    const seoParser = await this.getVerifiedParser(id, ownerEmail);
+
+    if (!seoParser) {
+      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
+    }
+
+    return this.seoParserTaskService.getTasksByParser(id);
   }
 }

@@ -27,4 +27,8 @@ export class SeoparsertaskService {
 
     this.seoParserTaskModel.create(parseResult);
   }
+
+  async getTasksByParser(parser: string) {
+    return this.seoParserTaskModel.find({ parser }).exec();
+  }
 }
