@@ -14,10 +14,14 @@ import { SeoparserService } from './seoparser.service';
 import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
 import { UserEmail } from 'src/decorators/user-email.decorator';
 import { UpdateSeoParserDto } from './dto/update-seoparser.dto';
+import { SeoparsertaskService } from './seoparsertask.service';
 
 @Controller('seoparser')
 export class SeoparserController {
-  constructor(private readonly seoParserService: SeoparserService) {}
+  constructor (
+    private readonly seoParserService: SeoparserService,
+    private readonly seoParserTaskService: SeoparsertaskService,
+    ) {}
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
@@ -62,5 +66,14 @@ export class SeoparserController {
   @Get(':id/tasks')
   async getAllTasks(@Param('id') id: string, @UserEmail() userEmail: string) {
     return this.seoParserService.getAllTasks(id, userEmail);
+  }
+
+
+  // debug
+  @Post('test')
+  async testParsing(
+    @Body() body
+  ) {
+    return this.seoParserTaskService.getPagesList(body.url);
   }
 }

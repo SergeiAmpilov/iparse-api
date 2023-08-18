@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SeoParserTaskDocument } from './model/seoparser.task.model';
+import axios from 'axios';
+import { ProxyConfig } from './proxy.config';
+import { parseString, parseStringPromise } from 'xml2js';
+
+
 
 @Injectable()
 export class SeoparsertaskService {
@@ -30,5 +35,25 @@ export class SeoparsertaskService {
 
   async getTasksByParser(parser: string) {
     return this.seoParserTaskModel.find({ parser }).exec();
+  }
+
+  async getPagesList(sitemapUrl): Promise<string[]> {
+
+    const linkList: string[] = [];
+    
+    const { data } = await axios.get(sitemapUrl, { proxy: ProxyConfig });
+    const parseResult = await parseStringPromise(data);
+
+    if (parseResult && parseResult?.sitemapindex?.sitemap?.length) {
+      for (const { loc } of parseResult.sitemapindex.sitemap) {
+        // console.log(loc[0]);
+        linkList.push(loc[0]);
+      }
+      
+    }
+
+    return linkList;
+
+
   }
 }
