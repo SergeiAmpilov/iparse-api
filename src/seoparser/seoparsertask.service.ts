@@ -40,20 +40,30 @@ export class SeoparsertaskService {
   async getPagesList(sitemapUrl): Promise<string[]> {
 
     const linkList: string[] = [];
+    const smList: string[] = [];
     
     const { data } = await axios.get(sitemapUrl, { proxy: ProxyConfig });
     const parseResult = await parseStringPromise(data);
 
     if (parseResult && parseResult?.sitemapindex?.sitemap?.length) {
       for (const { loc } of parseResult.sitemapindex.sitemap) {
-        // console.log(loc[0]);
-        linkList.push(loc[0]);
-      }
+        smList.push(loc[0]);
+      }      
+    }
+
+
+    for (const sm of smList) {
       
+      const { data } = await axios.get(sm, { proxy: ProxyConfig });
+      const parseResultSm = await parseStringPromise(data);
+
+      if (parseResultSm && parseResultSm?.urlset?.url?.length) {
+        for (const { loc } of parseResultSm.urlset.url) {
+          linkList.push(loc[0]);
+        }
+      }
     }
 
     return linkList;
-
-
   }
 }
