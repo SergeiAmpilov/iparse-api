@@ -17,16 +17,17 @@ export class SeoparsertaskService {
 
   async runParsing(id: string, resource: string) {
     const start = new Date();
-    const finish = new Date();
-    const count = 101;
-    const file = 'demo file';
 
+    const pagesList = await this.getPagesList(`${resource}sitemap.xml`);
+    
+    const file = 'demo file';
+    const finish = new Date();
     const parseResult = {
       parser: id,
       resource,
       start,
       finish,
-      count,
+      count: pagesList.length,
       file,
     };
 
@@ -37,7 +38,7 @@ export class SeoparsertaskService {
     return this.seoParserTaskModel.find({ parser }).exec();
   }
 
-  async getPagesList(sitemapUrl): Promise<string[]> {
+  async getPagesList(sitemapUrl: string): Promise<string[]> {
 
     const linkList: string[] = [];
     const smList: string[] = [];
