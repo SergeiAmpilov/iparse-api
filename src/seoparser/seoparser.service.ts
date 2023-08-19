@@ -17,7 +17,9 @@ export class SeoparserService {
     private readonly seoParserModel: Model<SeoParserDocument>,
     private readonly usersService: UsersService,
     private readonly seoParserTaskService: SeoparsertaskService,
-  ) {}
+  ) {
+    
+  }
 
   async create(
     dto: CreateSeoParserDto,
