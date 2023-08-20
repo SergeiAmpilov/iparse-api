@@ -4,7 +4,13 @@ import { Model } from 'mongoose';
 import { SeoParserTaskDocument } from './model/seoparser.task.model';
 import axios from 'axios';
 import { ProxyConfig } from './proxy.config';
-import { parseString, parseStringPromise } from 'xml2js';
+import { parseStringPromise } from 'xml2js';
+import { PageTags } from './types/page.tag';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { Browser, Page } from 'puppeteer';
+
+
 
 
 
@@ -18,7 +24,32 @@ export class SeoparsertaskService {
   async runParsing(id: string, resource: string) {
     const start = new Date();
 
+
+    const result: PageTags[] = [];
+
+    // links
     const pagesList = await this.getPagesList(`${resource}sitemap.xml`);
+
+
+    // tags
+    puppeteer.use(StealthPlugin());
+
+    const browser: Browser = await puppeteer.launch({
+      // headless: true,
+      defaultViewport: null,
+      args: [`--proxy-server=${ProxyConfig.host}:${ProxyConfig.port}`]
+    });
+
+    const page: Page = await browser.newPage();
+
+    for (const pageUrl of pagesList) {
+      const res = await this.getPageTags(pageUrl, page);
+      result.push(res);
+    }
+
+    browser.close();
+
+
     
     const file = 'demo file';
     const finish = new Date();
@@ -66,5 +97,21 @@ export class SeoparsertaskService {
     }
 
     return linkList;
+  }
+
+  private async getPageTags(url: string, page: Page): Promise<PageTags> {
+
+    const res = await page.evaluate((): PageTags => {
+      return {
+        title: document.querySelector('title')?.innerText,
+        description: document.querySelector('meta[name=description]')?.getAttribute('content')?.toString(),
+        h1: document.querySelector('h1')?.innerText.toString(),
+      }
+    });
+
+    return {
+      ...res,
+      url,
+    }
   }
 }
