@@ -58,7 +58,7 @@ export class SeoparsertaskService {
       resource,
       start,
       finish,
-      count: pagesList.length,
+      count: result.length,
       file,
     };
 
