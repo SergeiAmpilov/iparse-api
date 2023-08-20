@@ -7,8 +7,8 @@ import { ProxyConfig } from './proxy.config';
 import { parseStringPromise } from 'xml2js';
 import { PageTags } from './types/page.tag';
 import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { Browser, Page } from 'puppeteer';
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 
 
