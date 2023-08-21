@@ -9,6 +9,8 @@ import { PageTags } from './types/page.tag';
 import puppeteer from 'puppeteer-extra';
 import { Browser, Page } from 'puppeteer';
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+import { path } from 'app-root-path';
+const xl = require('excel4node');
 
 
 
@@ -49,7 +51,7 @@ export class SeoparsertaskService {
 
     browser.close();
 
-
+    const filename = await this.generateFile(result);
     
     const file = 'demo file';
     const finish = new Date();
@@ -59,7 +61,7 @@ export class SeoparsertaskService {
       start,
       finish,
       count: result.length,
-      file,
+      file: filename,
     };
 
     this.seoParserTaskModel.create(parseResult);
@@ -101,17 +103,49 @@ export class SeoparsertaskService {
 
   private async getPageTags(url: string, page: Page): Promise<PageTags> {
 
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+
     const res = await page.evaluate((): PageTags => {
-      return {
-        title: document.querySelector('title')?.innerText,
-        description: document.querySelector('meta[name=description]')?.getAttribute('content')?.toString(),
-        h1: document.querySelector('h1')?.innerText.toString(),
-      }
+
+      const title = document.querySelector('title')?.innerText;
+      const description = document.querySelector('meta[name=description]')?.getAttribute('content')?.toString();
+      const h1 = document.querySelector('h1')?.innerText.toString();
+
+      return { title, description, h1 };
+
     });
+
 
     return {
       ...res,
       url,
     }
+  }
+
+  private async generateFile(result: PageTags[]): Promise<string | undefined> {
+
+    const fileName = `seodata-${Math.floor(Date.now() / 1000)}.xls`;
+    const filePath = `${path}/parsefiles/${fileName}`;
+    const wb = new xl.Workbook();
+    const ws = wb.addWorksheet('Parse result');
+
+    let rowCounter = 0;
+
+    for (const record of result) {
+      rowCounter++;
+
+      ws.cell(rowCounter, 1).string(record.url ?? '');
+      ws.cell(rowCounter, 2).string(record.title ?? '');
+      ws.cell(rowCounter, 3).string(record.description ?? '');
+      ws.cell(rowCounter, 4).string(record.h1 ?? '');      
+    }
+
+    try {
+      await wb.write(filePath);
+      return fileName;
+    } catch (e) {
+      return undefined;
+    }
+
   }
 }

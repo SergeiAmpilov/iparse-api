@@ -3,6 +3,7 @@
 /node_modules
 
 .env
+/parsefiles
 
 # Logs
 logs

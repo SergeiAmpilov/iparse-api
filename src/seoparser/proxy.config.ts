@@ -1,5 +1,5 @@
 export const ProxyConfig = {
   protocol: 'https',
-  host: '194.110.112.222',
+  host: '134.209.152.140',
   port: 8443
 }
