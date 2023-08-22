@@ -25,6 +25,7 @@ export class SeoparsertaskService {
 
   async runParsing(id: string, resource: string) {
     const start = new Date();
+    console.log('start parsing pages list');
 
 
     const result: PageTags[] = [];
@@ -43,13 +44,21 @@ export class SeoparsertaskService {
     });
 
     const page: Page = await browser.newPage();
+    await page.setDefaultNavigationTimeout(0);
 
+    console.log('start parsing tags');
+
+    let cc = 0;
     for (const pageUrl of pagesList) {
+      cc++;
       const res = await this.getPageTags(pageUrl, page);
       result.push(res);
+      console.log(cc, res);
     }
 
     browser.close();
+
+    console.log('start create file');
 
     const filename = await this.generateFile(result);
     
@@ -103,7 +112,7 @@ export class SeoparsertaskService {
 
   private async getPageTags(url: string, page: Page): Promise<PageTags> {
 
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 0 });
 
     const res = await page.evaluate((): PageTags => {
 
