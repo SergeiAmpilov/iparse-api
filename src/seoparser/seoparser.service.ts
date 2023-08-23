@@ -8,7 +8,6 @@ import { UserDocument } from 'src/users/model/user.model';
 import { NOT_FOUND_USER_ERROR } from 'src/users/constants.users';
 import { SEO_PARSER_NOT_FOUND_ERROR } from './seoparser.constants';
 import { UpdateSeoParserDto } from './dto/update-seoparser.dto';
-import { SeoparsertaskService } from './seoparsertask.service';
 
 @Injectable()
 export class SeoparserService {
@@ -16,7 +15,6 @@ export class SeoparserService {
     @InjectModel('seoparser')
     private readonly seoParserModel: Model<SeoParserDocument>,
     private readonly usersService: UsersService,
-    private readonly seoParserTaskService: SeoparsertaskService,
   ) {
     
   }
@@ -71,17 +69,6 @@ export class SeoparserService {
     }
   }
 
-  async runTask(id: string, ownerEmail: string) {
-    const seoParser = await this.getVerifiedParser(id, ownerEmail);
-
-    if (!seoParser) {
-      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
-    }
-
-    this.seoParserTaskService.runParsing(id, seoParser.resource);
-    return { ok: 'seo parser started' };
-  }
-
   private async getVerifiedParser(
     id: string,
     ownerEmail: string,
@@ -108,13 +95,4 @@ export class SeoparserService {
     return seoParserFound;
   }
 
-  async getAllTasks(id: string, ownerEmail: string) {
-    const seoParser = await this.getVerifiedParser(id, ownerEmail);
-
-    if (!seoParser) {
-      throw new NotFoundException(SEO_PARSER_NOT_FOUND_ERROR);
-    }
-
-    return this.seoParserTaskService.getTasksByParser(id);
-  }
 }

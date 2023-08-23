@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, HydratedDocument, Schema as MSchema, Types } from 'mongoose';
 
 @Schema()
-export class SeoParserTaskModel extends Document {
+export class SeoTaskModel extends Document {
   @Prop({
     type: MSchema.Types.ObjectId,
     ref: 'seoparser',
@@ -35,6 +35,6 @@ export class SeoParserTaskModel extends Document {
   file: string;
 }
 
-export const SeoParserTaskSchema =
-  SchemaFactory.createForClass(SeoParserTaskModel);
-export type SeoParserTaskDocument = HydratedDocument<SeoParserTaskModel>;
+
+export const SeoTaskSchema = SchemaFactory.createForClass(SeoTaskModel);
+export type SeoTaskDocument = HydratedDocument<SeoTaskModel>;
