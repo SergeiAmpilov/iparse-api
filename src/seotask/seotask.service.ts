@@ -30,7 +30,7 @@ export class SeotaskService {
 
     // тут нужно сделать запрос на создание нового таска в самом парсере
 
-    return newTask._id;
+    return newTask;
 
   }
 
