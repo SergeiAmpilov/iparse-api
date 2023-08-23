@@ -69,7 +69,7 @@ export class SeoparserService {
     }
   }
 
-  private async getVerifiedParser(
+  public async getVerifiedParser(
     id: string,
     ownerEmail: string,
   ): Promise<SeoParserDocument | undefined> {

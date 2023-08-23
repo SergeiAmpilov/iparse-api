@@ -17,5 +17,6 @@ import { UsersModule } from 'src/users/users.module';
   ],
   controllers: [SeoparserController],
   providers: [SeoparserService],
+  exports: [SeoparserService],
 })
 export class SeoparserModule {}

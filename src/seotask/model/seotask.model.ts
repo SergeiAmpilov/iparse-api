@@ -16,6 +16,7 @@ export class SeoTaskModel extends Document {
 
   @Prop({
     type: MSchema.Types.Date,
+    default: Date.now
   })
   start: Date;
 
