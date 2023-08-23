@@ -1,13 +1,18 @@
-import { Body, Controller, Get, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateSeoTaskDto } from './dto/create-seotask.dto';
 import { JwtAuthGuard } from 'src/users/guards/jwt.guard';
 import { UserEmail } from 'src/decorators/user-email.decorator';
+import { FinishSeoTaskDto } from './dto/finish-seotask.dto';
 
 @Controller('seotask')
 export class SeotaskController {
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getTask() {}
+  async getTask(
+    @Param('id') id: string, 
+    @UserEmail() userEmail: string
+    ) {}
 
 
   @UseGuards(JwtAuthGuard)
@@ -18,10 +23,18 @@ export class SeotaskController {
     @UserEmail() userEmail: string
   ) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Get('byparser/:parserid')
+  async getAllTasksByParser(
+    @Param('parserid') parserid: string, 
+    @UserEmail() userEmail: string
+  ) {}
 
-  @Get()
-  async getAllTasksByParser() {}
-
-  @Post()
-  async finishTask() {}
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Post('finish/:id')
+  async finishTask(
+    @Body() dto: FinishSeoTaskDto,
+    @UserEmail() userEmail: string
+  ) {}
 }
