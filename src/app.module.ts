@@ -10,7 +10,6 @@ import { SeoparserModule } from './seoparser/seoparser.module';
 import { EcomparserModule } from './ecomparser/ecomparser.module';
 import { ExamplesModule } from './examples/examples.module';
 import { ConfigModule } from '@nestjs/config';
-import { ParserModule } from './parser/parser.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { ParserModule } from './parser/parser.module';
     SeoparserModule,
     EcomparserModule,
     ExamplesModule,
-    ParserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
