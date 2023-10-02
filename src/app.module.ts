@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { ServicesModule } from './services/services.module';
 import { UsersModule } from './users/users.module';
 import { TasksModule } from './tasks/tasks.module';
-import { ArticlesModule } from './articles/articles.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SeoparserModule } from './seoparser/seoparser.module';
 import { EcomparserModule } from './ecomparser/ecomparser.module';
@@ -19,7 +18,6 @@ import { SeotaskModule } from './seotask/seotask.module';
     ServicesModule,
     UsersModule,
     TasksModule,
-    ArticlesModule,
     SeoparserModule,
     EcomparserModule,
     ExamplesModule,
