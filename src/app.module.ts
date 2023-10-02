@@ -5,7 +5,6 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SeoparserModule } from './seoparser/seoparser.module';
 import { ConfigModule } from '@nestjs/config';
-import { SeotaskModule } from './seotask/seotask.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { SeotaskModule } from './seotask/seotask.module';
     ConfigModule.forRoot(),
     UsersModule,
     SeoparserModule,
-    SeotaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],
