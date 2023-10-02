@@ -6,7 +6,6 @@ import { UsersModule } from './users/users.module';
 import { TasksModule } from './tasks/tasks.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SeoparserModule } from './seoparser/seoparser.module';
-import { EcomparserModule } from './ecomparser/ecomparser.module';
 import { ExamplesModule } from './examples/examples.module';
 import { ConfigModule } from '@nestjs/config';
 import { SeotaskModule } from './seotask/seotask.module';
@@ -19,7 +18,6 @@ import { SeotaskModule } from './seotask/seotask.module';
     UsersModule,
     TasksModule,
     SeoparserModule,
-    EcomparserModule,
     ExamplesModule,
     SeotaskModule,
   ],
