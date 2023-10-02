@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServicesModule } from './services/services.module';
 import { UsersModule } from './users/users.module';
-import { TasksModule } from './tasks/tasks.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SeoparserModule } from './seoparser/seoparser.module';
 import { ConfigModule } from '@nestjs/config';
@@ -15,7 +14,6 @@ import { SeotaskModule } from './seotask/seotask.module';
     ConfigModule.forRoot(),
     ServicesModule,
     UsersModule,
-    TasksModule,
     SeoparserModule,
     SeotaskModule,
   ],
