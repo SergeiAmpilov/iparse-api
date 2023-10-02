@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   Post,
   UseGuards,
@@ -14,9 +15,10 @@ import {
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UsersService } from './users.service';
 import { UserLoginDto } from './dto/user-login.dto';
-import { PERMISSION_DENIED_ERROR, USER_ALREADY_EXIST_ERROR } from './constants.users';
+import { NOT_FOUND_USER_ERROR, PERMISSION_DENIED_ERROR, USER_ALREADY_EXIST_ERROR } from './constants.users';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { UserEmail } from 'src/decorators/user-email.decorator';
+import { SetAdminDto } from './dto/set-admin.dto';
 
 @Controller('users')
 export class UsersController {
@@ -54,5 +56,27 @@ export class UsersController {
     }
 
     return this.usersService.getUserInfo(email);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Post('setadmin')
+  async setAdmin(@Body() { email, isadmin }: SetAdminDto, @UserEmail() authUserEmail: string ) {
+    
+    const isAdmin = await this.usersService.isAdmin(authUserEmail);
+
+    if (!isAdmin) {
+      throw new ForbiddenException(PERMISSION_DENIED_ERROR);
+    }
+
+    const userFound = await this.usersService.findByEmail(email);
+
+    if (!userFound) {
+      throw new NotFoundException(NOT_FOUND_USER_ERROR);
+    }
+
+    this.usersService.setAdmin(userFound._id, isadmin);
+
+    return { ok: 'updated' };
   }
 }

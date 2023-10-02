@@ -75,6 +75,11 @@ export class UsersService {
   }
 
   async isAdmin(reqUserEmail: string): Promise<boolean> {
-    return (await this.getUserInfo(reqUserEmail)).isAdmin;
+    const userInfo = await this.getUserInfo(reqUserEmail);
+    return userInfo.isAdmin;
+  }
+
+  async setAdmin(id: string, isAdmin: boolean): Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id, { isAdmin }, { new: true }).exec();
   }
 }
