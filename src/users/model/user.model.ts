@@ -17,6 +17,12 @@ export class UserModel extends Document {
 
   @Prop({ type: MSchema.Types.String })
   passwordHash: string;
+
+  @Prop({
+    type: MSchema.Types.Boolean,
+    default: true,
+  })
+  isAdmin: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -58,5 +58,23 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return this.userModel.findOne({ email }).exec();
+  }
+
+  async getUserInfo(email: string) {
+    const userInfoFound = await this.userModel.findOne({ email }).exec();
+
+    if (!userInfoFound) {
+      throw new NotFoundException(NOT_FOUND_USER_ERROR);
+    }
+
+    return {
+      name: userInfoFound.name,
+      email: userInfoFound.email,
+      isAdmin: userInfoFound.isAdmin,
+    };
+  }
+
+  async isAdmin(reqUserEmail: string): Promise<boolean> {
+    return (await this.getUserInfo(reqUserEmail)).isAdmin;
   }
 }
