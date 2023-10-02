@@ -20,7 +20,7 @@ export class UserModel extends Document {
 
   @Prop({
     type: MSchema.Types.Boolean,
-    default: true,
+    default: false,
   })
   isAdmin: boolean;
 }
